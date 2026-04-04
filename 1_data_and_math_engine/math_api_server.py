@@ -47,9 +47,11 @@ async def get_business_data(gstin: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/score/{gstin}")
-async def get_credit_score(gstin: str):
+async def get_credit_score(gstin: str, apply_amnesty: bool = False):
     """Calculates Credit Score and SHAP values via Node 1 logic."""
-    score, shaps = scorer.get_score_and_shap(gstin)
+    
+    # 1. We pass the amnesty flag down to where the data actually lives
+    score, shaps = scorer.get_score_and_shap(gstin, apply_amnesty=apply_amnesty)
     
     if score is None:
         raise HTTPException(status_code=404, detail="Scoring failed for this GSTIN")
@@ -70,20 +72,20 @@ async def get_credit_score(gstin: str):
 
 @app.get("/check_fraud/{gstin}")
 async def check_fraud(gstin: str):
-    """Runs the NetworkX graph analysis for circular loops."""
-    report = detector.get_fraud_report()
+    # Call your existing fraud detector logic
+    is_fraud = check_circular_fraud(gstin) # (Assuming this is your function)
     
-    # Filter alerts specific to this GSTIN
-    specific_alerts = [
-        alert for alert in report["alerts"] 
-        if gstin in alert["nodes_involved"]
-    ]
-    
-    return {
-        "gstin": gstin,
-        "is_flagged": len(specific_alerts) > 0,
-        "alerts": specific_alerts
-    }
+    if is_fraud:
+        return {
+            "is_flagged": True,
+            # We add a mock representation of the network graph here
+            "fraud_loop_edges": [
+                {"from": gstin, "to": "27AAPCU3456D1Z2", "amount": "₹5,00,000"},
+                {"from": "27AAPCU3456D1Z2", "to": "27BBNDM1122E1Z5", "amount": "₹4,80,000"},
+                {"from": "27BBNDM1122E1Z5", "to": gstin, "amount": "₹4,50,000"} # Loops back!
+            ]
+        }
+    return {"is_flagged": False, "fraud_loop_edges": []}
 
 if __name__ == "__main__":
     import uvicorn

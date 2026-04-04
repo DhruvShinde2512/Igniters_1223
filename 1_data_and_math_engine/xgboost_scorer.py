@@ -69,13 +69,20 @@ class MSMEScorer:
         self.processed_df = df # Keep for lookup
         print("Model trained and SHAP explainer initialized.")
 
-    def get_score_and_shap(self, gstin):
+    def get_score_and_shap(self, gstin, apply_amnesty=False):
         """Returns (Score, SHAP_Dict) for a specific GSTIN."""
         row = self.processed_df[self.processed_df['business_id'] == gstin]
         if row.empty:
             return None, None
 
-        X_input = row[self.features_list]
+        # Added .copy() to prevent Pandas warnings during the demo
+        X_input = row[self.features_list].copy()
+        
+        # --- TWIST 2: DYNAMIC GST AMNESTY MASKING ---
+        if apply_amnesty and 'late_filings_count' in X_input.columns:
+            X_input['late_filings_count'] = 0
+        # --------------------------------------------
+
         score = float(self.model.predict(X_input)[0])
         
         shap_values = self.explainer.shap_values(X_input)
