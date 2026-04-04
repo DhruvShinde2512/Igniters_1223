@@ -1,0 +1,192 @@
+[
+    {
+        "business_id": "13fuPRP1126U8Z4",
+        "industry_context": {
+            "sector": "Services",
+            "buyer_market_type": "B2B",
+            "top_clients_share": 61.19,
+            "supply_chain_dependency": "Low"
+        },
+        "financials": {
+            "monthly_gst": 354865.84,
+            "pat_margin": 3.44,
+            "assets_to_liabilities": 2.28
+        },
+        "owner_profile": {
+            "pan_status": "Verified",
+            "failed_businesses": 0,
+            "dependents": 3
+        }
+    },
+    {
+        "business_id": "14YDPRP8564a7Z5",
+        "industry_context": {
+            "sector": "Retail",
+            "buyer_market_type": "Export",
+            "top_clients_share": 46.98,
+            "supply_chain_dependency": "High"
+        },
+        "financials": {
+            "monthly_gst": 455373.98,
+            "pat_margin": 12.95,
+            "assets_to_liabilities": 1.44
+        },
+        "owner_profile": {
+            "pan_status": "Verified",
+            "failed_businesses": 0,
+            "dependents": 4
+        }
+    },
+    {
+        "business_id": "35CjPRP9343b1Z8",
+        "industry_context": {
+            "sector": "Manufacturing",
+            "buyer_market_type": "B2B",
+            "top_clients_share": 60.66,
+            "supply_chain_dependency": "Low"
+        },
+        "financials": {
+            "monthly_gst": 441040.25,
+            "pat_margin": 9.54,
+            "assets_to_liabilities": 2.26
+        },
+        "owner_profile": {
+            "pan_status": "Verified",
+            "failed_businesses": 0,
+            "dependents": 2
+        }
+    },
+    {
+        "business_id": "31HpPRP2150Q8Z8",
+        "industry_context": {
+            "sector": "Services",
+            "buyer_market_type": "B2C",
+            "top_clients_share": 10.3,
+            "supply_chain_dependency": "High"
+        },
+        "financials": {
+            "monthly_gst": 79275.78,
+            "pat_margin": 13.59,
+            "assets_to_liabilities": 2.9
+        },
+        "owner_profile": {
+            "pan_status": "Verified",
+            "failed_businesses": 1,
+            "dependents": 5
+        }
+    },
+    {
+        "business_id": "29uyPRP5175s6Z9",
+        "industry_context": {
+            "sector": "Services",
+            "buyer_market_type": "B2C",
+            "top_clients_share": 53.03,
+            "supply_chain_dependency": "Low"
+        },
+        "financials": {
+            "monthly_gst": 449920.75,
+            "pat_margin": 4.75,
+            "assets_to_liabilities": 1.25
+        },
+        "owner_profile": {
+            "pan_status": "Verified",
+            "failed_businesses": 2,
+            "dependents": 3
+        }
+    },
+    {
+        "business_id": "23mzPRP1679w1Z7",
+        "industry_context": {
+            "sector": "Textiles",
+            "buyer_market_type": "B2B",
+            "top_clients_share": 64.86,
+            "supply_chain_dependency": "High"
+        },
+        "financials": {
+            "monthly_gst": 235821.75,
+            "pat_margin": 9.47,
+            "assets_to_liabilities": 1.62
+        },
+        "owner_profile": {
+            "pan_status": "Verified",
+            "failed_businesses": 2,
+            "dependents": 2
+        }
+    },
+    {
+        "business_id": "33ysPRP4821L6Z4",
+        "industry_context": {
+            "sector": "Services",
+            "buyer_market_type": "Export",
+            "top_clients_share": 25.39,
+            "supply_chain_dependency": "Medium"
+        },
+        "financials": {
+            "monthly_gst": 190444.38,
+            "pat_margin": 4.36,
+            "assets_to_liabilities": 2.41
+        },
+        "owner_profile": {
+            "pan_status": "Verified",
+            "failed_businesses": 1,
+            "dependents": 1
+        }
+    },
+    {
+        "business_id": "30kdPRP4947N1Z1",
+        "industry_context": {
+            "sector": "Manufacturing",
+            "buyer_market_type": "B2C",
+            "top_clients_share": 49.61,
+            "supply_chain_dependency": "Medium"
+        },
+        "financials": {
+            "monthly_gst": 407475.02,
+            "pat_margin": 9.52,
+            "assets_to_liabilities": 3.01
+        },
+        "owner_profile": {
+            "pan_status": "Verified",
+            "failed_businesses": 2,
+            "dependents": 2
+        }
+    },
+    {
+        "business_id": "37FpPRP8228p3Z8",
+        "industry_context": {
+            "sector": "Textiles",
+            "buyer_market_type": "Export",
+            "top_clients_share": 67.05,
+            "supply_chain_dependency": "High"
+        },
+        "financials": {
+            "monthly_gst": 172500.64,
+            "pat_margin": 9.51,
+            "assets_to_liabilities": 1.61
+        },
+        "owner_profile": {
+            "pan_status": "Verified",
+            "failed_businesses": 0,
+            "dependents": 3
+        }
+    },
+    {
+        "business_id": "35OMPRP3591g6Z5",
+        "industry_context": {
+            "sector": "Textiles",
+            "buyer_market_type": "B2C",
+            "top_clients_share": 51.85,
+            "supply_chain_dependency": "Low"
+        },
+        "financials": {
+            "monthly_gst": 158769.35,
+            "pat_margin": 6.03,
+            "assets_to_liabilities": 1.47
+        },
+        "owner_profile": {
+            "pan_status": "Verified",
+            "failed_businesses": 1,
+            "dependents": 1
+        }
+    }
+]
