@@ -11,10 +11,12 @@ AI_NODE_URL = os.getenv("AI_NODE_IP", "http://10.50.94.31:8001")
 # Standardize timeout for hackathon responsiveness
 TIMEOUT = 15 
 
-def fetch_math_score(gstin: str) -> dict:
+def fetch_math_score(gstin: str, apply_amnesty: bool = False) -> dict:
     """Fetches the XGBoost score and SHAP values from the Ubuntu Math Engine."""
     try:
-        response = requests.get(f"{MATH_NODE_URL}/score/{gstin}", timeout=TIMEOUT)
+        # We add the apply_amnesty flag as a query parameter in the URL
+        url = f"{MATH_NODE_URL}/score/{gstin}?apply_amnesty={str(apply_amnesty).lower()}"
+        response = requests.get(url, timeout=TIMEOUT)
         response.raise_for_status()
         return response.json()
     except requests.exceptions.RequestException as e:
@@ -55,6 +57,16 @@ def fetch_market_swot(industry_context: dict) -> dict:
         return response.json()
     except requests.exceptions.RequestException as e:
         return {"error": True, "message": f"Cloud SWOT Error: {str(e)}"}
+
+def fetch_chat_response(prompt: str, context: dict) -> dict:
+    """Sends the loan officer's chat message to the Mac AI Hub."""
+    try:
+        payload = {"prompt": prompt, "context": context}
+        response = requests.post(f"{AI_NODE_URL}/chat", json=payload, timeout=30)
+        response.raise_for_status()
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        return {"error": True, "message": f"AI Chat Error: {str(e)}"}
 
 if __name__ == "__main__":
     # Quick debug test block

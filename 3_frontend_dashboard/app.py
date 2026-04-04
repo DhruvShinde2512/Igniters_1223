@@ -61,6 +61,12 @@ with st.sidebar:
     if uploaded_file:
         st.success(f"{uploaded_file.name} queued for OCR.")
         
+    st.markdown("---")
+    st.markdown("### 🏛️ Policy Controls")
+    # TWIST 2: The UI Toggle for the Amnesty Scheme
+    apply_amnesty = st.toggle("Activate Q3 GST Amnesty", value=False, help="Waives penalties for late GST filings in the current quarter.")
+    st.markdown("---")
+        
     analyze_btn = st.button("Run Deep Analysis", type="primary", use_container_width=True)
 
 # --- MAIN LOGIC EXECUTION ---
@@ -70,7 +76,7 @@ if analyze_btn and gstin_input:
     
     with st.status("Initializing MSME Intelligence...", expanded=True) as status:
         st.write("📡 Fetching baseline math & fraud data from Node 1 (Ubuntu)...")
-        math_data = api_client.fetch_math_score(gstin_input)
+        math_data = api_client.fetch_math_score(gstin_input, apply_amnesty=apply_amnesty)
         fraud_data = api_client.fetch_fraud_alerts(gstin_input)
         
         if math_data.get("error"):
@@ -79,7 +85,7 @@ if analyze_btn and gstin_input:
             st.stop()
 
         st.write("🧠 Translating SHAP values on Node 2 (Mac M4)...")
-        shap_payload = {"shap_dict": math_data["shap_explanations"], "base_score": math_data["base_score"]}
+        shap_payload = {"shap_dict": math_data["shap_explanations"], "base_score": math_data["final_score"]}
         shap_explanation = api_client.fetch_shap_explanation(shap_payload)
         
         # Note: In a full app, you'd fetch the actual owner profile from Node 1. 
@@ -108,10 +114,28 @@ st.title("🏦 Executive Dashboard")
 if st.session_state.current_analysis:
     data = st.session_state.current_analysis
     
-    # FRAUD WARNING BANNER
+   # FRAUD WARNING BANNER & GRAPH VISUALIZATION
     if data["fraud"].get("is_flagged") or data["math"].get("fraud_penalty", 0) > 0:
         st.error("🚨 **CRITICAL ALERT:** This GSTIN is involved in a circular transaction loop (Possible fake turnover). Proceed with extreme caution.")
-    
+        
+        # Twist 1: Draw the Fraud Ring dynamically
+        if data["fraud"].get("fraud_loop_edges"):
+            st.markdown("#### 🔗 Detected Money Rotation Topology")
+            
+            # Build a raw DOT string for Streamlit to render safely
+            dot_string = 'digraph FraudRing {\n'
+            dot_string += '  rankdir=LR;\n' # Left to Right layout
+            dot_string += '  node [shape=box, style=filled, color="#FCA5A5"];\n' # Red boxes
+            
+            for edge in data["fraud"]["fraud_loop_edges"]:
+                # Add each transaction as an arrow in the graph
+                dot_string += f'  "{edge["from"]}" -> "{edge["to"]}" [label="{edge["amount"]}", color="red"];\n'
+                
+            dot_string += '}'
+            
+            # Render it natively
+            st.graphviz_chart(dot_string)
+
     # --- TABS ---
     tab1, tab2, tab3 = st.tabs(["📊 Executive Summary", "👤 Founder Risk", "🌍 Market Intelligence"])
     
@@ -161,13 +185,17 @@ if prompt := st.chat_input("Ask a question about this application (e.g., 'What i
     with st.chat_message("user"):
         st.markdown(prompt)
         
-    # Mock AI response (In a real scenario, you'd send this to the Mac Node)
     with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            time.sleep(1) # Simulating latency
-            if st.session_state.current_analysis and "risk" in prompt.lower():
-                response = "Based on the generated profile, the highest immediate risk is the GST filing delays detected by the XGBoost model."
+        with st.spinner("Thinking (Running on Mac M4)..."):
+            
+            # Send the chat and the current data to the Mac
+            ai_reply = api_client.fetch_chat_response(prompt, st.session_state.current_analysis)
+            
+            # Extract the text safely
+            if isinstance(ai_reply, dict) and "error" in ai_reply:
+                response_text = ai_reply["message"]
             else:
-                response = "I am tracking the MSME profile. Let me know if you need specific calculations or risk breakdowns."
-            st.markdown(response)
-            st.session_state.chat_history.append({"role": "assistant", "content": response})
+                response_text = ai_reply.get("analysis", str(ai_reply))
+                
+            st.markdown(response_text)
+            st.session_state.chat_history.append({"role": "assistant", "content": response_text})
